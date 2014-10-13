@@ -1,38 +1,31 @@
 package com.travellazy;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.Test;
+
+import java.io.IOException;
+
+import static com.jayway.restassured.path.json.JsonPath.with;
+import static junit.framework.TestCase.assertTrue;
 
 /**
  * Unit test for simple App.
  */
-public class AppTest 
-    extends TestCase
+
+public class AppTest
 {
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
+    @Test
+     public void checkRfqSubmitMissingEmailOnly() throws IOException
+     {
+         String JSON = ResourceFileHelper.getJsonContent("errorNoEmailSingleRfqResponse.json");
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+         String expectedMessage = ResourceFileHelper.getJsonContent("missingEmail.json");
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
-    }
+         assertTrue(with(JSON).get("listError[0]").equals(expectedMessage));
+ //                .body("listError[0]", equalTo(expectedMessage))
+ //                .given()
+ //                .contentType("application/json")
+ //                .body(jsonToFire)
+ //                .post("/rfq/submit");
+     }
+
 }
